@@ -49,7 +49,7 @@ pub struct Config {
     /// This is only for the last three bits of the address, meaning E2, E1, E0 in the datasheet.
     /// E.g. if E2 = 1, E1 = 1, E0 = 0, use `0b110`. The rest of the address will be filled
     /// automatically, based on context
-    address: u8,
+    pub address: u8,
 }
 
 pub struct M24C64<I2C, F> {
@@ -78,7 +78,7 @@ where
     /// ```
     /// use m24c64::{M24C64, Config};
     ///
-    /// let eeprom = M24C64::new(Config::default());
+    /// let eeprom = M24C64::new(i2c, Config::default());
     /// ```
     pub fn new(i2c: I2C, config: Config) -> M24C64<I2C, NoIdentificationPage> {
         M24C64 {
@@ -100,7 +100,7 @@ where
     /// ```
     /// use m24c64::{M24C64, Config};
     ///
-    /// let eeprom = M24C64::new(Config::default()).with_id_page();
+    /// let eeprom = M24C64::new(i2c, Config::default()).with_id_page();
     /// ```
     pub fn with_id_page(self) -> M24C64<I2C, IdentificationPage> {
         M24C64 {
