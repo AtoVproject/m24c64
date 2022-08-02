@@ -1,15 +1,15 @@
-[![crates.io](https://img.shields.io/crates/d/embedded-driver.svg)](https://crates.io/crates/embedded-driver)
-[![crates.io](https://img.shields.io/crates/v/embedded-driver.svg)](https://crates.io/crates/embedded-driver)
-[![Documentation](https://docs.rs/embedded-driver/badge.svg)](https://docs.rs/embedded-driver)
+[![crates.io](https://img.shields.io/crates/d/m24c64.svg)](https://crates.io/crates/m24c64)
+[![crates.io](https://img.shields.io/crates/v/m24c64.svg)](https://crates.io/crates/m24c64)
+[![Documentation](https://docs.rs/m24c64/badge.svg)](https://docs.rs/m24c64)
 ![Minimum Supported Rust Version](https://img.shields.io/badge/rustc-1.46+-blue.svg)
 
-# `embedded-driver-template`
+# `m24c64`
 
->  A rust-embedded driver template to get you started
+>  A rust-embedded driver for the STMicroelectronics M24C64(-D) EEPROM
 
 ## [API reference]
 
-[API reference]: https://docs.rs/embedded-driver
+[API reference]: https://docs.rs/m24c64
 
 ## Minimum Supported Rust Version (MSRV)
 

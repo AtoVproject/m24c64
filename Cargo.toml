@@ -1,14 +1,14 @@
 [package]
-name = "embedded-driver-template"
-description = "A rust-embedded driver template"
+name = "m24c64"
+description = "A rust-embedded driver for the STMicroelectronics M24C64(-D) EEPROM"
 categories = ["embedded", "hardware-support", "no-std"]
-documentation = "https://docs.rs/embedded-driver-template"
+documentation = "https://docs.rs/m24c64"
 authors = ["Chris Maniewski"]
 version = "0.1.0"
 edition = "2021"
 readme = "README.md"
 license = "MIT OR Apache-2.0"
-repository = "https://git.sr.ht/~chmanie/embedded-driver-template"
+repository = "https://git.sr.ht/~chmanie/m24c64"
 
 # See more keys and their definitions at https://doc.rust-lang.org/cargo/reference/manifest.html
 
