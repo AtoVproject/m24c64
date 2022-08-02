@@ -26,6 +26,22 @@ enum Dest {
     Identification = 0xb,
 }
 
+/*
+ * M264C64 configuration
+ *
+ * Only configures the I2C address of the device
+ *
+ * # Example (create config with other than default settings)
+ *
+ * ```
+ * use m24c64::Config;
+ *
+ * let config = Config {
+ *     address: 0b101,
+ *     ..Config::default()
+ * };
+ * ```
+ */
 #[derive(Default)]
 pub struct Config {
     /**
@@ -55,6 +71,21 @@ impl<I2C, S, F> M24C64<I2C, F>
 where
     I2C: Write<u8, Error = S> + WriteRead<u8, Error = S>,
 {
+    /*
+     * Create a new instance of the M24C64 driver
+     * # Arguments
+     *
+     * * `i2c` - embedded-hal compatible I2C instance
+     * * `config` - The M24C64 `Config` device configuration struct
+     *
+     * # Example
+     *
+     * ```
+     * use m24c64::{M24C64, Config};
+     *
+     * let eeprom = M24C64::new(Config::default());
+     * ```
+     */
     pub fn new(i2c: I2C, config: Config) -> M24C64<I2C, NoIdentificationPage> {
         M24C64 {
             _device_family: NoIdentificationPage,
@@ -70,6 +101,14 @@ where
      * The M24C64-D offers an additional page, named the Identification Page (32 byte).
      * The Identification Page can be used to store sensitive application parameters which can be
      * (later) permanently locked in Read-only mode
+     *
+     * # Example
+     *
+     *  ```
+     *  use m24c64::{M24C64, Config};
+     *
+     *  let eeprom = M24C64::new(Config::default()).with_id_page();
+     *  ```
      */
     pub fn with_id_page(self) -> M24C64<I2C, IdentificationPage> {
         M24C64 {
