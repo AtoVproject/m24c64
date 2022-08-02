@@ -26,33 +26,29 @@ enum Dest {
     Identification = 0xb,
 }
 
-/*
- * M264C64 configuration
- *
- * Only configures the I2C address of the device
- *
- * # Example (create config with other than default settings)
- *
- * ```
- * use m24c64::Config;
- *
- * let config = Config {
- *     address: 0b101,
- *     ..Config::default()
- * };
- * ```
- */
+/// M264C64 configuration
+///
+/// Only configures the I2C address of the device
+///
+/// # Example (create config with other than default settings)
+///
+/// ```
+/// use m24c64::Config;
+///
+/// let config = Config {
+///     address: 0b101,
+///     ..Config::default()
+/// };
+/// ```
 #[derive(Default)]
 pub struct Config {
-    /**
-     * Chip enable address
-     *
-     * # Note
-     *
-     * This is only for the last three bits of the address, meaning E2, E1, E0 in the datasheet.
-     * E.g. if E2 = 1, E1 = 1, E0 = 0, use `0b110`. The rest of the address will be filled
-     * automatically, based on context
-     */
+    /// Chip enable address
+    ///
+    /// # Note
+    ///
+    /// This is only for the last three bits of the address, meaning E2, E1, E0 in the datasheet.
+    /// E.g. if E2 = 1, E1 = 1, E0 = 0, use `0b110`. The rest of the address will be filled
+    /// automatically, based on context
     address: u8,
 }
 
@@ -71,21 +67,19 @@ impl<I2C, S, F> M24C64<I2C, F>
 where
     I2C: Write<u8, Error = S> + WriteRead<u8, Error = S>,
 {
-    /*
-     * Create a new instance of the M24C64 driver
-     * # Arguments
-     *
-     * * `i2c` - embedded-hal compatible I2C instance
-     * * `config` - The M24C64 `Config` device configuration struct
-     *
-     * # Example
-     *
-     * ```
-     * use m24c64::{M24C64, Config};
-     *
-     * let eeprom = M24C64::new(Config::default());
-     * ```
-     */
+    /// Create a new instance of the M24C64 driver
+    /// # Arguments
+    ///
+    /// * `i2c` - embedded-hal compatible I2C instance
+    /// * `config` - The M24C64 `Config` device configuration struct
+    ///
+    /// # Example
+    ///
+    /// ```
+    /// use m24c64::{M24C64, Config};
+    ///
+    /// let eeprom = M24C64::new(Config::default());
+    /// ```
     pub fn new(i2c: I2C, config: Config) -> M24C64<I2C, NoIdentificationPage> {
         M24C64 {
             _device_family: NoIdentificationPage,
@@ -95,21 +89,19 @@ where
         }
     }
 
-    /*
-     * Create an instance of the M24C64-D device family type
-     *
-     * The M24C64-D offers an additional page, named the Identification Page (32 byte).
-     * The Identification Page can be used to store sensitive application parameters which can be
-     * (later) permanently locked in Read-only mode
-     *
-     * # Example
-     *
-     *  ```
-     *  use m24c64::{M24C64, Config};
-     *
-     *  let eeprom = M24C64::new(Config::default()).with_id_page();
-     *  ```
-     */
+    /// Create an instance of the M24C64-D device family type
+    ///
+    /// The M24C64-D offers an additional page, named the Identification Page (32 byte).
+    /// The Identification Page can be used to store sensitive application parameters which can be
+    /// (later) permanently locked in Read-only mode
+    ///
+    /// # Example
+    ///
+    /// ```
+    /// use m24c64::{M24C64, Config};
+    ///
+    /// let eeprom = M24C64::new(Config::default()).with_id_page();
+    /// ```
     pub fn with_id_page(self) -> M24C64<I2C, IdentificationPage> {
         M24C64 {
             _device_family: IdentificationPage,
@@ -145,11 +137,9 @@ where
         self.write_raw(Dest::Memory, (page * 32) as usize, bytes)
     }
 
-    /**
-     * Write bytes to an arbitrary location in memory
-     *
-     * Note: Checks whether buffer will fit on page and will **not** wrap
-     */
+    /// Write bytes to an arbitrary location in memory
+    ///
+    /// Note: Checks whether buffer will fit on page and will **not** wrap
     pub fn write(&mut self, address: usize, bytes: &[u8]) -> Result<(), Error<S>> {
         let start_idx = address % 32;
         if start_idx + bytes.len() > 32 {
@@ -163,11 +153,9 @@ where
         self.read_raw(Dest::Memory, (page * 32) as usize, bytes)
     }
 
-    /**
-     * Read a memory location into a buffer until it is full
-     *
-     * Note: Checks whether address is out of bounds and will **not** wrap
-     */
+    /// Read a memory location into a buffer until it is full
+    ///
+    /// Note: Checks whether address is out of bounds and will **not** wrap
     pub fn read(&mut self, address: usize, bytes: &mut [u8]) -> Result<(), Error<S>> {
         if address + bytes.len() > ADDRESS_LAST {
             return Err(Error::Address);
@@ -180,11 +168,9 @@ impl<I2C, S> M24C64<I2C, IdentificationPage>
 where
     I2C: Write<u8, Error = S> + WriteRead<u8, Error = S>,
 {
-    /**
-     * Write bytes to an arbitrary location on the Identification page
-     *
-     * Note: Checks whether buffer will fit on page and will **not** wrap
-     */
+    /// Write bytes to an arbitrary location on the Identification page
+    ///
+    /// Note: Checks whether buffer will fit on page and will **not** wrap
     pub fn write_id(&mut self, mut address: usize, bytes: &[u8]) -> Result<(), Error<S>> {
         if address + bytes.len() > 32 {
             return Err(Error::Address);
@@ -208,11 +194,9 @@ where
         self.write_raw(Dest::Identification, address, &[data_byte])
     }
 
-    /**
-     * Read a location on the Identification page into a buffer until it is full
-     *
-     * Note: Checks whether address is out of bounds and will **not** wrap
-     */
+    /// Read a location on the Identification page into a buffer until it is full
+    ///
+    /// Note: Checks whether address is out of bounds and will **not** wrap
     pub fn read_id(&mut self, address: usize, bytes: &mut [u8]) -> Result<(), Error<S>> {
         if address + bytes.len() > 32 {
             return Err(Error::Address);
