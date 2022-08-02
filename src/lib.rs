@@ -5,7 +5,9 @@ use embedded_hal::blocking::i2c::{Write, WriteRead};
 /// 256 pages containing 32 bytes
 pub const ADDRESS_LAST: usize = 256 * 32;
 
+/// Typestate struct for M24C64-D
 pub struct IdentificationPage;
+/// Typestate struct for M24C64
 pub struct NoIdentificationPage;
 
 #[derive(Debug)]
@@ -26,7 +28,7 @@ enum Dest {
     Identification = 0xb,
 }
 
-/// M264C64 configuration
+/// M26C64 configuration
 ///
 /// Only configures the I2C address of the device
 ///
@@ -52,6 +54,7 @@ pub struct Config {
     pub address: u8,
 }
 
+/// M24C64 driver
 pub struct M24C64<I2C, F> {
     // Device family. M24C64 (no Identification page) or M24C64D (with Identification page)
     _device_family: F,
