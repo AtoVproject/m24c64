@@ -24,8 +24,8 @@ pub enum Error<I> {
 
 #[repr(u8)]
 enum Dest {
-    Memory = 0xa,
-    Identification = 0xb,
+    Memory = 0x50,
+    Identification = 0x58,
 }
 
 /// M26C64 configuration
