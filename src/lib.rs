@@ -136,8 +136,8 @@ where
     }
 
     /// Write exactly 32 bytes to a page
-    pub fn write_page(&mut self, page: u8, bytes: &[u8; 32]) -> Result<(), Error<S>> {
-        self.write_raw(Dest::Memory, (page * 32) as usize, bytes)
+    pub fn write_page(&mut self, page: usize, bytes: &[u8; 32]) -> Result<(), Error<S>> {
+        self.write_raw(Dest::Memory, page * 32, bytes)
     }
 
     /// Write bytes to an arbitrary location in memory
@@ -152,8 +152,8 @@ where
     }
 
     /// Read exactly one page into a buffer
-    pub fn read_page(&mut self, page: u8, bytes: &mut [u8; 32]) -> Result<(), Error<S>> {
-        self.read_raw(Dest::Memory, (page * 32) as usize, bytes)
+    pub fn read_page(&mut self, page: usize, bytes: &mut [u8; 32]) -> Result<(), Error<S>> {
+        self.read_raw(Dest::Memory, page * 32, bytes)
     }
 
     /// Read a memory location into a buffer until it is full
